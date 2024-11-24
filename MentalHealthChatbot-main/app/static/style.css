@@ -1,0 +1,33 @@
+/* MentalHealthChatbot/app/static/styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#chatbox {
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+input[type="text"] {
+    width: calc(100% - 90px);
+    padding: 10px;
+}
+
+button {
+    padding: 10px 20px;
+}

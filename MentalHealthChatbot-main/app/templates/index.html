@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mental Health Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            height: 100vh;
+            background: linear-gradient(135deg, #e0f7fa, #b2ebf2); /* Teal gradient for calming effect */
+            color: #333; /* Dark gray text color */
+            overflow: hidden;
+            animation: fadeIn 1s; /* Fade-in animation for the body */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        #container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+            border-radius: 15px; /* Rounded corners for container */
+            overflow: hidden; /* Hide overflow */
+        }
+        #left {
+            flex: 1;
+            padding: 40px;
+            background-color: #ffffff; /* White background for the question area */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-right: 4px solid #4b8b9a; /* Soft teal border */
+            position: relative;
+            transition: transform 0.3s; /* Smooth transition for hover effects */
+        }
+        #left:hover {
+            transform: translateY(-5px); /* Slight lift effect on hover */
+        }
+        #right {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #b2ebf2; /* Light teal for the camera feed area */
+            position: relative; /* For hover effects */
+            transition: transform 0.3s; /* Smooth transition for hover effects */
+        }
+        #right:hover {
+            transform: scale(1.05); /* Slight enlarge effect on hover */
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            color: #00796b; /* Teal color for the title */
+            text-align: center; /* Centered title */
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow for text */
+        }
+        #question {
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: bold; /* Bold for emphasis */
+            color: #444; /* Darker gray for contrast */
+            transition: color 0.3s; /* Smooth color transition */
+        }
+        #response-container {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        #response {
+            width: 60%; /* Adjusted width for a more balanced layout */
+            padding: 15px; /* Increased padding */
+            font-size: 18px;
+            border: 2px solid #4b8b9a; /* Soft teal border */
+            border-radius: 25px; /* Rounded corners for input */
+            transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition for focus effects */
+            outline: none; /* Remove default outline */
+        }
+        #response:focus {
+            border-color: #00796b; /* Darker teal on focus */
+            box-shadow: 0 0 5px rgba(0, 121, 107, 0.5); /* Soft glow effect */
+        }
+        #submit {
+            padding: 10px 25px; /* Increased padding for button */
+            font-size: 18px;
+            color: white;
+            background-color: #00796b; /* Soft teal for the button */
+            border: none;
+            border-radius: 25px; /* Rounded corners for button */
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+            margin-left: 10px; /* Spacing between input and button */
+        }
+        #submit:hover {
+            background-color: #004d40; /* Darker teal on hover */
+            transform: scale(1.05); /* Slightly increase size on hover */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow on hover */
+        }
+        #overall-sentiment {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #27ae60; /* Green color for overall sentiment */
+            text-align: center; /* Centered sentiment text */
+            transition: color 0.3s; /* Smooth color transition */
+        }
+        video {
+            width: 90%; /* Adjusted width for video */
+            height: auto;
+            border: 5px solid #ffffff; /* White border for video */
+            border-radius: 10px; /* Rounded corners for video */
+            transition: transform 0.3s; /* Smooth transition for scaling */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Shadow for video */
+        }
+        #right:hover video {
+            transform: scale(1.05); /* Slightly enlarge video on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <div id="left">
+            <h1>Mental Health Chatbot</h1>
+            <div id="question">Loading question...</div>
+            <div id="response-container">
+                <input type="text" id="response" placeholder="Type your answer here..." required>
+                <button id="submit">Submit</button>
+            </div>
+            <div id="overall-sentiment">Overall Sentiment: <span id="sentiment-result">Neutral</span></div>
+        </div>
+
+        <div id="right">
+            <video id="video" autoplay></video> <!-- Video element for webcam feed -->
+        </div>
+    </div>
+
+    <script>
+        const submitButton = document.getElementById('submit');
+        const questionDiv = document.getElementById('question');
+        const responseInput = document.getElementById('response');
+        const sentimentResultDiv = document.getElementById('sentiment-result');
+        const videoElement = document.getElementById('video');
+
+        // Function to start video stream
+        function startVideoStream() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    videoElement.srcObject = stream;
+                    videoElement.play();
+                })
+                .catch(error => {
+                    console.error("Error accessing webcam: ", error);
+                });
+        }
+
+        // Function to get the next question
+        function getNextQuestion() {
+            fetch('/get_question')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.question) {
+                        questionDiv.textContent = data.question;
+                    } else {
+                        questionDiv.textContent = "Thank you for your responses! Analyzing sentiment...";
+                        // Call to predict sentiment after all questions have been answered
+                        predictSentiment();
+                    }
+                });
+        }
+
+        // Function to predict sentiment
+        function predictSentiment() {
+            fetch('/predict_sentiment')
+                .then(response => response.json())
+                .then(data => {
+                    sentimentResultDiv.textContent = data.sentiment; // Update the sentiment result
+                });
+        }
+
+        // Event listener for submit button
+        submitButton.addEventListener('click', () => {
+            const userInput = responseInput.value;
+            if (!userInput) {
+                alert("Please enter a response."); // Alert if no input is provided
+                return; // Prevent proceeding if input is empty
+            }
+            responseInput.value = ""; // Clear input box
+
+            fetch('/answer_question', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user_input: userInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.next_question) {
+                    questionDiv.textContent = data.next_question;
+                } else {
+                    questionDiv.textContent = "Thank you for your responses! Analyzing sentiment...";
+                    // Call to predict sentiment after all questions have been answered
+                    predictSentiment();
+                }
+            });
+        });
+
+        // Start video and load the first question
+        startVideoStream();
+        getNextQuestion();
+    </script>
+</body>
+</html>

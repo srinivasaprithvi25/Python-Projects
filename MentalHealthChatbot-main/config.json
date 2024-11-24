@@ -1,0 +1,14 @@
+{
+    "expressions": [
+        "happy",
+        "sad",
+        "angry",
+        "surprised",
+        "neutral"
+    ],
+    "num_images_per_expression": 200,
+    "base_dir": "data/processed/images",
+    "camera_width": 640,
+    "camera_height": 480,
+    "capture_delay": 0.1
+}
