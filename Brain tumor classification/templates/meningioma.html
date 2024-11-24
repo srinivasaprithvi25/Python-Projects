@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tumor Details - Meningioma</title>
+    <style>
+        :root {
+            --text-dark: #333;
+            --text-light: #f5f5f5;
+            --primary-color: #2a9d8f;
+            --secondary-color: #e76f51;
+            --background-color: #f1faee;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            background-image: url('static/assets/bg2.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-light);
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin: 0;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgb(223, 252, 241);
+            border-radius: 10px;
+        }
+
+        .section-content {
+            flex: 1;
+            margin-right: 20px;
+        }
+
+        .section-content h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .section-content p, .section-content ul {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .section-content ul {
+            list-style: disc;
+            margin-left: 20px;
+        }
+
+        .section-image {
+            flex: 1;
+            text-align: center;
+        }
+
+        .section-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .section-image img:hover {
+            transform: scale(1.05);
+        }
+
+        .centered-section {
+            text-align: justify;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgb(223, 252, 241);
+            border-radius: 10px;
+        }
+
+        .centered-section h2 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .centered-section p, .centered-section ul {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: black;
+        }
+
+        .centered-section ul {
+            list-style: disc;
+            margin-left: 20px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Meningioma</h1>
+    </header>
+
+    <section class="section">
+        <div class="section-content">
+            <h2>What is Meningioma?</h2>
+            <p>Meningioma is a type of tumor that arises from the <strong>meninges</strong>, the membranes that surround the brain and spinal cord. While most meningiomas are benign <strong>(noncancerous)</strong>, some can be atypical or malignant, growing more aggressively.</p>
+            <p>Meningiomas account for about <strong>30%</strong> of all primary brain tumors and are more common in <strong>women</strong> than men. They can occur at any age but are most often diagnosed in <strong>older adults</strong>.</p>
+        </div>
+        <div class="section-image">
+            <img src="static/assets/meningioma.jpg" alt="Meningioma image">
+        </div>
+    </section>
+
+    <section class="centered-section">
+        <h2>Types of Meningioma</h2>
+        <ul>
+            <li><strong>Benign Meningioma:</strong> The most common type, these tumors are slow-growing and less likely to spread.</li>
+            <br>
+            <li><strong>Atypical Meningioma:</strong> These tumors grow more quickly and have a higher risk of recurrence after treatment.</li>
+            <br>
+            <li><strong>Anaplastic (Malignant) Meningioma:</strong> The rarest type, these tumors are aggressive, grow quickly, and can spread to other parts of the brain or body.</li>
+        </ul>
+    </section>
+
+    <section class="centered-section">
+        <h2>Symptoms</h2>
+        <p>The symptoms of meningioma depend on the tumor's size and location. Common symptoms include:</p>
+        <ul>
+            <li>Headaches, which can be severe and worsen over time.</li>
+            <li>Seizures, particularly in those who have never had seizures before.</li>
+            <li>Vision problems, such as double vision or partial vision loss.</li>
+            <li>Hearing loss or ringing in the ears.</li>
+            <li>Memory loss or changes in cognitive function.</li>
+            <li>Weakness in the limbs or difficulty walking.</li>
+            <li>Personality changes or mood swings.</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Your Organization</p>
+    </footer>
+</body>
+</html>

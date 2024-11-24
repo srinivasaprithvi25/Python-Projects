@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}">
+</head>
+<body>
+    <div class="container">
+        {% if error %}
+            <h1>Error</h1>
+            <p>{{ error }}</p>
+        {% else %}
+            <h1>Prediction Result</h1>
+            <p>The predicted category is: <strong>{{ predicted_label }}</strong></p>
+            <a href="/"><button>Go Back</button></a>
+        {% endif %}
+    </div>
+</body>
+</html>

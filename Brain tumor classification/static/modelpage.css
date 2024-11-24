@@ -1,0 +1,94 @@
+/* Reset some default styles */
+body, h1, form, input, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Basic body styling with a background image */
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('assets/modelbg1.png');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Page container to hold both the image and the content */
+.page-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px; /* Adjust based on your layout needs */
+    margin: 0 auto;
+    padding: 1rem; /* Add some padding to ensure content doesn't touch edges */
+}
+
+/* Doctor image styling */
+.doctor-image {
+    width: 40%; /* Increased size */
+    max-width: 500px; /* Adjusted max-width */
+    border-radius: 8px;
+    margin-right: 2rem;
+}
+
+/* Centering content with a semi-transparent container */
+.container {
+    background-color: rgba(228, 250, 246, 0.9); /* Slight transparency */
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1; /* Allows container to take the remaining space */
+    max-width: 600px; /* Optional: set a max-width for better layout control */
+    text-align: center; /* Center text within container */
+}
+
+/* Form container */
+.form-container {
+    margin: 0 auto; /* Center the form-container within its parent */
+}
+
+/* Header styling */
+h1 {
+    font-size: 2rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+/* Form styling */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* File input styling */
+input[type="file"] {
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    width: 100%; /* Make input field responsive */
+    max-width: 400px; /* Optional: set a max-width for better control */
+}
+
+/* Button styling */
+button {
+    background-color: #28bf96;
+    border: none;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #5338f0;
+}

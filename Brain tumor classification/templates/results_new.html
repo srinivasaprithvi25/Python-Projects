@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles2.css') }}">
+</head>
+<body>
+    <div class="container">
+        {% if error %}
+            <h1>Error</h1>
+            <p>{{ error }}</p>
+        {% else %}
+            <h1>Prediction Result</h1>
+            <p>The predicted category is: <strong>{{ predicted_label }}</strong></p>
+            {% if predicted_label == "glioma" %}
+                <p>Click the button below to learn more about Glioma:</p>
+                <a href="/giloma"><button>Learn More About Glioma</button></a>
+            {% elif predicted_label == "meningioma" %}
+                <p>Click the button below to learn more about Meningioma:</p>
+                <a href="/meningioma"><button>Learn More About Meningioma</button></a>
+            {% elif predicted_label == "pituitary Tumor" %}
+                <p>Click the button below to learn more about Pituitary Tumor:</p>
+                <a href="/pituitary"><button>Learn More About Pituitary Tumor</button></a>
+            {% else %}
+                <p>Click the button below to learn more about this tumor type:</p>
+                <a href="/"><button>Learn More</button></a>
+            {% endif %}
+            <a href="/"><button>Go Back</button></a>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='modelpage.css') }}">
+</head>
+<body>
+    <div class="page-container">
+        <img src="static/assets/doctor.jpg" alt="Doctor Image" class="doctor-image">
+        <div class="container">
+            <div class="form-container">
+                <h1>Upload an Image to Predict Its Category</h1>
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <input type="file" name="file" accept="image/*" required>
+                    <button type="submit">Upload</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
