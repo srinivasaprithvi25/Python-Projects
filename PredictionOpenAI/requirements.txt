@@ -5,6 +5,7 @@ psycopg2-binary
 pymysql
 pyodbc
 pandas
+joblib
 numpy
 matplotlib
 scikit-learn
@@ -14,3 +15,5 @@ pmdarima
 torch
 transformers
 flask
+tensorflow
+pytest

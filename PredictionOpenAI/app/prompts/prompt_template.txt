@@ -6,4 +6,5 @@ Respond with a Python dictionary with keys:
 - "table": name of the SQL table to fetch from
 - "date_column": the column with datetime
 - "target_column": the column to predict
+- "columns": list of additional columns required (optional)
 - "filters": any SQL WHERE filters (optional)

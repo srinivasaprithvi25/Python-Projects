@@ -28,6 +28,4 @@ def parse_query(query):
     try:
         return json.loads(content)
     except Exception as e:
-        print("❌ Failed to parse JSON:", e)
-        print("🔍 Raw response:\n", content)
-        return {}
+        raise ValueError(f"Failed to parse JSON response: {e}\nRaw response: {content}")
