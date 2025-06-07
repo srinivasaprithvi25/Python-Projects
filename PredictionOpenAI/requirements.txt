@@ -1,0 +1,16 @@
+openai>=1.0.0
+sqlalchemy
+python-dotenv
+psycopg2-binary
+pymysql
+pyodbc
+pandas
+numpy
+matplotlib
+scikit-learn
+statsmodels
+xgboost
+pmdarima
+torch
+transformers
+flask

@@ -1,0 +1,9 @@
+You are a data assistant. Convert the following business query into structured metadata needed for forecasting.
+
+Query: {{query}}
+
+Respond with a Python dictionary with keys:
+- "table": name of the SQL table to fetch from
+- "date_column": the column with datetime
+- "target_column": the column to predict
+- "filters": any SQL WHERE filters (optional)
