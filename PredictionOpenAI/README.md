@@ -30,6 +30,27 @@ DB_NAME=database_name
 # If using SQLite set DB_PATH instead of the above connection options
 ```
 
+## Local Installation
+
+Set up the project locally without Docker:
+
+1. Create and activate a virtual environment:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate
+   ```
+
+2. Install the required dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Prepare a `.env` file in the project root with your database connection
+   details and OpenAI API key as shown above.
+
+
 ### Running with Docker Compose
 
 1. Build and start the container:
