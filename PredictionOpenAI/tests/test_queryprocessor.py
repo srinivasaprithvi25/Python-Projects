@@ -1,8 +1,12 @@
 import json
+
+import os
+import sys
 import types
 import pytest
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+from PredictionOpenAI.app.utils import QueryProcessor
 
-from utils import QueryProcessor
 
 class DummyResponse:
     def __init__(self, content):
@@ -10,6 +14,7 @@ class DummyResponse:
 
 def dummy_create(*args, **kwargs):
     return DummyResponse('{invalid}')
+
 
 def dummy_create_valid(*args, **kwargs):
     content = json.dumps({
@@ -19,6 +24,7 @@ def dummy_create_valid(*args, **kwargs):
         "query": "SELECT * FROM sales"
     })
     return DummyResponse(content)
+
 
 
 def test_parse_query_invalid_json(monkeypatch):

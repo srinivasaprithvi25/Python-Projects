@@ -1,10 +1,12 @@
 import os
+import sys
 import pandas as pd
 import pytest
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from sqlalchemy import text
+from PredictionOpenAI.app.utils.DatabaseConnection import get_db_engine
+from PredictionOpenAI.app.utils.DataFetcher import fetch_data
 
-from utils.DatabaseConnection import get_db_engine
-from utils.DataFetcher import fetch_data
 
 DB_FILE = 'test.db'
 
@@ -47,6 +49,7 @@ def test_fetch_data_invalid_column():
         fetch_data(query_info)
 
 
+
 def test_fetch_data_direct_query():
     query_info = {
         'query': 'SELECT date, sales FROM sales',
@@ -57,7 +60,6 @@ def test_fetch_data_direct_query():
     df = fetch_data(query_info)
     assert list(df.columns) == ['date', 'sales']
     assert not df.empty
-
 
 def test_fetch_data_mongodb(monkeypatch):
     os.environ['DB_TYPE'] = 'mongodb'
@@ -75,3 +77,4 @@ def test_fetch_data_mongodb(monkeypatch):
     df = fetch_data(query_info)
     assert not df.empty
     os.environ['DB_TYPE'] = 'sqlite'
+
