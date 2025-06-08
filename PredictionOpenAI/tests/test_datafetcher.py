@@ -19,6 +19,8 @@ def setup_module(module):
     with engine.begin() as conn:
         conn.execute(text('CREATE TABLE sales (date TEXT, sales INTEGER, category TEXT)'))
         conn.execute(text("INSERT INTO sales VALUES ('2023-01-01', 100, 'A')"))
+        conn.execute(text('CREATE TABLE category_lookup (category TEXT, description TEXT)'))
+        conn.execute(text("INSERT INTO category_lookup VALUES ('A', 'Category A')"))
 
 
 def teardown_module(module):
@@ -77,4 +79,17 @@ def test_fetch_data_mongodb(monkeypatch):
     df = fetch_data(query_info)
     assert not df.empty
     os.environ['DB_TYPE'] = 'sqlite'
+
+
+def test_fetch_data_join_query():
+    query_info = {
+        'tables': ['sales s', 'category_lookup c'],
+        'joins': 'JOIN category_lookup c ON s.category = c.category',
+        'date_column': 's.date',
+        'target_column': 's.sales',
+        'columns': ['s.date', 's.sales', 'c.description']
+    }
+    df = fetch_data(query_info)
+    assert list(df.columns) == ['date', 'sales', 'description']
+    assert df['description'].iloc[0] == 'Category A'
 
