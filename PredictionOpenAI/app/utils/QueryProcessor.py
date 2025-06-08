@@ -14,7 +14,10 @@ def parse_query(query):
     with open(os.path.abspath(prompt_path), 'r') as f:
         prompt_template = f.read()
 
-    full_prompt = prompt_template.replace("{{query}}", query)
+    db_type = os.getenv("DB_TYPE", "")
+    full_prompt = (prompt_template
+                   .replace("{{query}}", query)
+                   .replace("{{db_type}}", db_type))
 
     response = client.chat.completions.create(
         model="gpt-4",
@@ -28,6 +31,4 @@ def parse_query(query):
     try:
         return json.loads(content)
     except Exception as e:
-        print("❌ Failed to parse JSON:", e)
-        print("🔍 Raw response:\n", content)
-        return {}
+        raise ValueError(f"Failed to parse JSON response: {e}\nRaw response: {content}")

@@ -1,0 +1,60 @@
+import os
+import sys
+import pandas as pd
+import pytest
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+from sqlalchemy import text
+
+from PredictionOpenAI.app.utils.DatabaseConnection import get_db_engine
+from PredictionOpenAI.app.utils.DataFetcher import fetch_data
+
+DB_FILE = 'test.db'
+
+def setup_module(module):
+    os.environ['DB_TYPE'] = 'sqlite'
+    os.environ['DB_PATH'] = DB_FILE
+    if os.path.exists(DB_FILE):
+        os.remove(DB_FILE)
+    engine = get_db_engine()
+    with engine.begin() as conn:
+        conn.execute(text('CREATE TABLE sales (date TEXT, sales INTEGER, category TEXT)'))
+        conn.execute(text("INSERT INTO sales VALUES ('2023-01-01', 100, 'A')"))
+
+
+def teardown_module(module):
+    if os.path.exists(DB_FILE):
+        os.remove(DB_FILE)
+
+
+def test_fetch_data_valid_columns():
+    query_info = {
+        'table': 'sales',
+        'date_column': 'date',
+        'target_column': 'sales',
+        'columns': ['date', 'sales', 'category']
+    }
+    df = fetch_data(query_info)
+    assert list(df.columns) == ['date', 'sales', 'category']
+    assert not df.empty
+
+
+def test_fetch_data_invalid_column():
+    query_info = {
+        'table': 'sales',
+        'date_column': 'date',
+        'target_column': 'sales',
+        'columns': ['date', 'sales', 'missing']
+    }
+    with pytest.raises(ValueError):
+        fetch_data(query_info)
+
+
+def test_fetch_data_custom_query():
+    query_info = {
+        'query': 'SELECT date, sales FROM sales',
+        'date_column': 'date',
+        'target_column': 'sales'
+    }
+    df = fetch_data(query_info)
+    assert list(df.columns) == ['date', 'sales']
+    assert not df.empty

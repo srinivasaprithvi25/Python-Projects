@@ -6,6 +6,8 @@ An LLM-integrated time series forecasting tool that uses OpenAI to interpret bus
 
 - Natural language interface for business forecasting
 - Smart SQL query generation using LLM
+  - LLM can specify schemas, columns, and even full join queries
+  - If provided, a complete SQL query in the `query` field is executed directly
 - Multi-model ensemble: SARIMA, LSTM, XGBoost, ARIMA
 - Dockerized for deployment
 - Logs and prompt history support
