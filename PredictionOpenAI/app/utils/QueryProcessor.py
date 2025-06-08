@@ -14,7 +14,12 @@ def parse_query(query):
     with open(os.path.abspath(prompt_path), 'r') as f:
         prompt_template = f.read()
 
-    full_prompt = prompt_template.replace("{{query}}", query)
+    db_type = os.getenv("DB_TYPE", "")
+    full_prompt = (
+        prompt_template
+        .replace("{{query}}", query)
+        .replace("{{db_type}}", db_type)
+    )
 
     response = client.chat.completions.create(
         model="gpt-4",

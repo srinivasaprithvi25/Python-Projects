@@ -1,10 +1,11 @@
-You are a data assistant. Convert the following business query into structured metadata needed for forecasting.
+You are a data assistant. The database type is {{db_type}}. Convert the following business query into structured metadata needed for forecasting and provide a complete query string.
 
 Query: {{query}}
 
 Respond with a Python dictionary with keys:
-- "table": name of the SQL table to fetch from
+- "table": name of the table or collection to fetch from
 - "date_column": the column with datetime
 - "target_column": the column to predict
 - "columns": list of additional columns required (optional)
-- "filters": any SQL WHERE filters (optional)
+- "filters": any filters (optional)
+- "query": the full query string or MongoDB aggregation pipeline
