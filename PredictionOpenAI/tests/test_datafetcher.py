@@ -30,9 +30,10 @@ def teardown_module(module):
 
 def test_fetch_data_valid_columns():
     query_info = {
+        'schema': 'SOPMT',
         'table': 'sales',
         'date_column': 'date',
-        'target_column': 'sales',
+        'target_column': ['sales'],
         'columns': ['date', 'sales', 'category']
     }
     df = fetch_data(query_info)
@@ -42,9 +43,10 @@ def test_fetch_data_valid_columns():
 
 def test_fetch_data_invalid_column():
     query_info = {
+        'schema': 'SOPMT',
         'table': 'sales',
         'date_column': 'date',
-        'target_column': 'sales',
+        'target_column': ['sales'],
         'columns': ['date', 'sales', 'missing']
     }
     with pytest.raises(ValueError):
@@ -57,11 +59,22 @@ def test_fetch_data_direct_query():
         'query': 'SELECT date, sales FROM sales',
         'table': 'sales',
         'date_column': 'date',
-        'target_column': 'sales'
+        'target_column': ['sales']
     }
     df = fetch_data(query_info)
     assert list(df.columns) == ['date', 'sales']
     assert not df.empty
+
+
+def test_fetch_data_missing_column_in_result():
+    query_info = {
+        'query': 'SELECT date FROM sales',
+        'table': 'sales',
+        'date_column': 'date',
+        'target_column': ['sales']
+    }
+    with pytest.raises(ValueError):
+        fetch_data(query_info)
 
 def test_fetch_data_mongodb(monkeypatch):
     os.environ['DB_TYPE'] = 'mongodb'
@@ -74,7 +87,7 @@ def test_fetch_data_mongodb(monkeypatch):
         'query': {'date': '2023-01-01'},
         'table': 'sales',
         'date_column': 'date',
-        'target_column': 'sales'
+        'target_column': ['sales']
     }
     df = fetch_data(query_info)
     assert not df.empty
@@ -86,7 +99,7 @@ def test_fetch_data_query_failure():
         'query': 'SELECT * FROM missing_table',
         'table': 'missing_table',
         'date_column': 'date',
-        'target_column': 'sales'
+        'target_column': ['sales']
     }
     with pytest.raises(ValueError) as exc:
         fetch_data(query_info)

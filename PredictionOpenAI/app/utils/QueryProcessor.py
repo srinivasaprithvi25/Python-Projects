@@ -20,12 +20,13 @@ def parse_query(query):
                    .replace("{{db_type}}", db_type))
 
 
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[
-            {"role": "user", "content": full_prompt}
-        ]
-    )
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": full_prompt}]
+        )
+    except Exception as exc:
+        raise RuntimeError(f"OpenAI API request failed: {exc}") from exc
 
     content = response.choices[0].message.content
 
@@ -34,13 +35,14 @@ def parse_query(query):
     except Exception as e:
         raise ValueError(f"Failed to parse JSON response: {e}\nRaw response: {content}")
 
-    # Normalize tables/joins fields if they were returned as strings
-    for key in ("tables", "joins"):
-        if key in result and isinstance(result[key], str):
-            try:
-                result[key] = json.loads(result[key])
-            except Exception:
-                # Fallback to comma separated list for tables
-                if key == "tables":
-                    result[key] = [t.strip() for t in result[key].split(',')]
+    # Normalise common fields returned as strings
+    if "target_column" in result and isinstance(result["target_column"], str):
+        result["target_column"] = [result["target_column"]]
+
+    if "limit" in result:
+        try:
+            result["limit"] = int(result["limit"])
+        except Exception:
+            pass
+
     return result

@@ -81,6 +81,15 @@ your shell) and then run:
 python app/main.py
 ```
 
+## Testing
+
+Install the dependencies needed for running the tests and execute `pytest`:
+
+```bash
+pip install -r requirements.txt
+pytest -q
+```
+
 Forecast plots are saved under `logs/` and query history under
 `data/history.json`.
 
