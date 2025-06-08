@@ -81,15 +81,15 @@ def test_fetch_data_mongodb(monkeypatch):
     os.environ['DB_TYPE'] = 'sqlite'
 
 
-def test_fetch_data_join_query():
+def test_fetch_data_query_failure():
     query_info = {
-        'tables': ['sales s', 'category_lookup c'],
-        'joins': 'JOIN category_lookup c ON s.category = c.category',
-        'date_column': 's.date',
-        'target_column': 's.sales',
-        'columns': ['s.date', 's.sales', 'c.description']
+        'query': 'SELECT * FROM missing_table',
+        'table': 'missing_table',
+        'date_column': 'date',
+        'target_column': 'sales'
     }
-    df = fetch_data(query_info)
-    assert list(df.columns) == ['date', 'sales', 'description']
-    assert df['description'].iloc[0] == 'Category A'
+    with pytest.raises(ValueError) as exc:
+        fetch_data(query_info)
+    assert 'SELECT * FROM missing_table' in str(exc.value)
+
 

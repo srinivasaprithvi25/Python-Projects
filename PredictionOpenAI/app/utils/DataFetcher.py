@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from sqlalchemy import text, inspect
+from sqlalchemy.exc import SQLAlchemyError
 from utils.DatabaseConnection import get_db_engine
 
 def _fetch_mongo(query, db_name, collection):
@@ -31,12 +32,16 @@ def fetch_data(query_info, extra_columns=None):
             if date_col in df.columns:
                 df[date_col] = pd.to_datetime(df[date_col])
             return df.sort_values(by=date_col)
+        else:
+            engine = get_db_engine()
+            sql = text(query_info["query"])
+            print("🔍 Executing SQL:", sql.text)
+            try:
+                df = pd.read_sql_query(sql, engine, parse_dates=[date_col])
+            except SQLAlchemyError as exc:
+                raise ValueError(f"Failed to execute SQL: {sql.text}\n{exc}") from exc
+            return df.sort_values(by=date_col)
 
-        engine = get_db_engine()
-        sql = text(query_info["query"])
-        print("🔍 Executing SQL:", sql.text)
-        df = pd.read_sql_query(sql, engine, parse_dates=[date_col])
-        return df.sort_values(by=date_col)
 
     table = query_info.get('table')
     engine = get_db_engine()
@@ -87,5 +92,8 @@ def fetch_data(query_info, extra_columns=None):
 
     print("🔍 Executing SQL:", sql.text)
 
-    df = pd.read_sql_query(sql, engine, parse_dates=[date_col])
+    try:
+        df = pd.read_sql_query(sql, engine, parse_dates=[date_col])
+    except SQLAlchemyError as exc:
+        raise ValueError(f"Failed to execute SQL: {sql.text}\n{exc}") from exc
     return df.sort_values(by=date_col)
