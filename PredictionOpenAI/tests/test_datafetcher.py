@@ -78,3 +78,15 @@ def test_fetch_data_mongodb(monkeypatch):
     assert not df.empty
     os.environ['DB_TYPE'] = 'sqlite'
 
+
+def test_fetch_data_query_failure():
+    query_info = {
+        'query': 'SELECT * FROM missing_table',
+        'table': 'missing_table',
+        'date_column': 'date',
+        'target_column': 'sales'
+    }
+    with pytest.raises(ValueError) as exc:
+        fetch_data(query_info)
+    assert 'SELECT * FROM missing_table' in str(exc.value)
+
