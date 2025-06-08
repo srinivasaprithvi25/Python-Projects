@@ -11,3 +11,9 @@ Respond with a Python dictionary with keys:
 - "target_column": the column to predict
 - "columns": list of additional columns required (optional)
 - "filters": any SQL WHERE filters (optional)
+- "tables": list of tables if more than one is required (optional)
+- "joins": join clauses or objects describing joins between the tables (optional)
+
+If multiple tables are needed but you do not provide a complete SQL query in
+the `query` field, return the `tables` list along with the necessary `joins`
+information so the application can assemble the final query.
