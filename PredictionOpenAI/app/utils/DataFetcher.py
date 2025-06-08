@@ -31,23 +31,15 @@ def fetch_data(query_info, extra_columns=None):
             if date_col in df.columns:
                 df[date_col] = pd.to_datetime(df[date_col])
             return df.sort_values(by=date_col)
-        else:
-            engine = get_db_engine()
-            sql = text(query_info["query"])
-            print("🔍 Executing SQL:", sql.text)
-            df = pd.read_sql_query(sql, engine, parse_dates=[date_col])
-            return df.sort_values(by=date_col)
 
-    engine = get_db_engine()
-    date_col = query_info['date_column']
-    target_col = query_info['target_column']
-
-    # If the LLM returned a full SQL query, execute it directly
-    if 'query' in query_info:
-        sql = text(query_info['query'])
+        engine = get_db_engine()
+        sql = text(query_info["query"])
         print("🔍 Executing SQL:", sql.text)
         df = pd.read_sql_query(sql, engine, parse_dates=[date_col])
         return df.sort_values(by=date_col)
+
+    engine = get_db_engine()
+    target_col = query_info['target_column']
 
     table = query_info['table']
     schema = query_info.get('schema')
