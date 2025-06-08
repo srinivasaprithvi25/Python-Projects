@@ -2,11 +2,12 @@
 
 An LLM-integrated time series forecasting tool that uses OpenAI to interpret business questions, generate SQL queries, retrieve data, and run models like SARIMA, LSTM, XGBoost, and ARIMA to forecast future values.
 
-## Features
+-## Features
 
 - Natural language interface for business forecasting
-- Smart SQL query generation using LLM
-  - LLM can specify which schema and columns to retrieve
+- Smart SQL/MongoDB query generation using LLM
+  - LLM can specify which columns to retrieve and returns a full query string
+
 - Multi-model ensemble: SARIMA, LSTM, XGBoost, ARIMA
 - Dockerized for deployment
 - Logs and prompt history support
@@ -22,7 +23,7 @@ database connection details and OpenAI key:
 
 ```bash
 OPENAI_API_KEY=your-openai-key
-DB_TYPE=postgresql  # or mysql, mssql, sqlite
+DB_TYPE=postgresql  # or mysql, mssql, sqlite, mongodb
 DB_USER=username
 DB_PASSWORD=password
 DB_HOST=hostname
@@ -81,4 +82,10 @@ python app/main.py
 
 Forecast plots are saved under `logs/` and query history under
 `data/history.json`.
+
+## Security considerations
+
+The LLM now returns a full query string that the application executes
+directly. Ensure the environment is trusted and review generated queries
+before running in production databases.
 
