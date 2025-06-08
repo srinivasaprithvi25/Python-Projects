@@ -32,13 +32,12 @@ def get_db_engine():
             conn.execute(text("SELECT 1"))
         print("✅ Connected to database")
         list_schemas_and_tables(engine)
+
     except Exception as e:
         print(f"❌ Database connection failed: {e}")
         raise
 
     return engine
-
-
 def list_schemas_and_tables(engine):
     """Print available schemas and tables to help users craft queries."""
     try:
@@ -61,3 +60,4 @@ def list_schemas_and_tables(engine):
                 print(f"  \U0001F4C4 {table}")
     except Exception as e:
         print(f"❌ Failed to list schemas/tables: {e}")
+

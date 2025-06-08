@@ -19,6 +19,7 @@ def parse_query(query):
                    .replace("{{query}}", query)
                    .replace("{{db_type}}", db_type))
 
+
     response = client.chat.completions.create(
         model="gpt-4",
         messages=[
