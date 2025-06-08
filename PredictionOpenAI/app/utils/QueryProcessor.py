@@ -30,6 +30,17 @@ def parse_query(query):
     content = response.choices[0].message.content
 
     try:
-        return json.loads(content)
+        result = json.loads(content)
     except Exception as e:
         raise ValueError(f"Failed to parse JSON response: {e}\nRaw response: {content}")
+
+    # Normalize tables/joins fields if they were returned as strings
+    for key in ("tables", "joins"):
+        if key in result and isinstance(result[key], str):
+            try:
+                result[key] = json.loads(result[key])
+            except Exception:
+                # Fallback to comma separated list for tables
+                if key == "tables":
+                    result[key] = [t.strip() for t in result[key].split(',')]
+    return result

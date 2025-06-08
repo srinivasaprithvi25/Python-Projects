@@ -19,6 +19,8 @@ def setup_module(module):
     with engine.begin() as conn:
         conn.execute(text('CREATE TABLE sales (date TEXT, sales INTEGER, category TEXT)'))
         conn.execute(text("INSERT INTO sales VALUES ('2023-01-01', 100, 'A')"))
+        conn.execute(text('CREATE TABLE category_lookup (category TEXT, description TEXT)'))
+        conn.execute(text("INSERT INTO category_lookup VALUES ('A', 'Category A')"))
 
 
 def teardown_module(module):
@@ -89,4 +91,5 @@ def test_fetch_data_query_failure():
     with pytest.raises(ValueError) as exc:
         fetch_data(query_info)
     assert 'SELECT * FROM missing_table' in str(exc.value)
+
 
