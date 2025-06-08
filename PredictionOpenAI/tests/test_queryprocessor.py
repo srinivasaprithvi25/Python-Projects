@@ -18,9 +18,10 @@ def dummy_create(*args, **kwargs):
 
 def dummy_create_valid(*args, **kwargs):
     content = json.dumps({
+        "schema": "SOPMT",
         "table": "sales",
         "date_column": "date",
-        "target_column": "sales",
+        "target_column": ["sales"],
         "query": "SELECT * FROM sales"
     })
     return DummyResponse(content)
@@ -28,12 +29,17 @@ def dummy_create_valid(*args, **kwargs):
 
 def dummy_create_join(*args, **kwargs):
     content = json.dumps({
-        "tables": ["sales s", "category_lookup c"],
-        "joins": "JOIN category_lookup c ON s.category = c.category",
+        "schema": "SOPMT",
+        "table": "sales s",
+        "join_clause": "JOIN category_lookup c ON s.category = c.category",
         "date_column": "s.date",
-        "target_column": "s.sales"
+        "target_column": ["s.sales"]
     })
     return DummyResponse(content)
+
+
+def dummy_create_error(*args, **kwargs):
+    raise RuntimeError('network error')
 
 
 
@@ -52,5 +58,11 @@ def test_parse_query_returns_query(monkeypatch):
 def test_parse_query_with_joins(monkeypatch):
     monkeypatch.setattr(QueryProcessor.client.chat.completions, 'create', dummy_create_join)
     result = QueryProcessor.parse_query('test query')
-    assert result['tables'][0] == 'sales s'
-    assert 'joins' in result
+    assert result['table'].startswith('sales')
+    assert 'join_clause' in result
+
+
+def test_parse_query_api_failure(monkeypatch):
+    monkeypatch.setattr(QueryProcessor.client.chat.completions, 'create', dummy_create_error)
+    with pytest.raises(RuntimeError):
+        QueryProcessor.parse_query('test query')
