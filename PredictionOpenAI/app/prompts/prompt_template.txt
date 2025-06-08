@@ -4,6 +4,7 @@ Query: {{query}}
 
 Respond with a Python dictionary with keys:
 - "table": name of the SQL table to fetch from
+- "schema": table schema if applicable (optional)
 - "date_column": the column with datetime
 - "target_column": the column to predict
 - "columns": list of additional columns required (optional)

@@ -25,13 +25,39 @@ def get_db_engine():
     else:
         raise ValueError("Unsupported DB type")
 
+
     engine = create_engine(uri)
     try:
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
         print("✅ Connected to database")
+        list_schemas_and_tables(engine)
     except Exception as e:
         print(f"❌ Database connection failed: {e}")
         raise
 
     return engine
+
+
+def list_schemas_and_tables(engine):
+    """Print available schemas and tables to help users craft queries."""
+    try:
+        with engine.connect() as conn:
+            print("\n\U0001F4C2 Schemas and Tables in the Database:")
+            result = conn.execute(text(
+                """
+                SELECT table_schema, table_name
+                FROM information_schema.tables
+                WHERE table_type = 'BASE TABLE'
+                ORDER BY table_schema, table_name;
+                """
+            ))
+            rows = result.fetchall()
+            current_schema = None
+            for schema, table in rows:
+                if schema != current_schema:
+                    print(f"\n\U0001F4C1 Schema: {schema}")
+                    current_schema = schema
+                print(f"  \U0001F4C4 {table}")
+    except Exception as e:
+        print(f"❌ Failed to list schemas/tables: {e}")
