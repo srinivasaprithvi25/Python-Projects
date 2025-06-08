@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
 
@@ -25,4 +25,13 @@ def get_db_engine():
     else:
         raise ValueError("Unsupported DB type")
 
-    return create_engine(uri)
+    engine = create_engine(uri)
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        print("✅ Connected to database")
+    except Exception as e:
+        print(f"❌ Database connection failed: {e}")
+        raise
+
+    return engine

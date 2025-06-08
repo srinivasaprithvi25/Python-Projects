@@ -24,5 +24,8 @@ def fetch_data(query_info, extra_columns=None):
     if filters:
         sql = text(f"{sql.text} WHERE {filters}")
 
+    print("🔍 Executing SQL:", sql.text)
+
+
     df = pd.read_sql_query(sql, engine, parse_dates=[date_col])
     return df.sort_values(by=date_col)
