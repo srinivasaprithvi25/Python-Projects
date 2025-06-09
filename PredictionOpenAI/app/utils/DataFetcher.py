@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import sqlparse
 from sqlalchemy import text, inspect
 from sqlalchemy.exc import SQLAlchemyError
 from utils.DatabaseConnection import get_db_engine
@@ -22,6 +23,15 @@ def _fetch_mongo(query, db_name, collection):
         cursor = coll.find(query)
     return pd.DataFrame(list(cursor))
 
+def validate_sql(sql):
+    """Basic SQL syntax validation using sqlparse."""
+    try:
+        parsed = sqlparse.parse(sql)
+        if not parsed:
+            raise ValueError("No SQL statement found")
+    except Exception as exc:
+        raise ValueError(f"Invalid SQL syntax: {exc}") from exc
+
 def fetch_data(query_info, extra_columns=None):
     db_type = os.getenv("DB_TYPE")
     date_col = query_info["date_column"]
@@ -34,6 +44,7 @@ def fetch_data(query_info, extra_columns=None):
             df = df.sort_values(by=date_col)
         else:
             engine = get_db_engine()
+            validate_sql(query_info["query"])
             sql = text(query_info["query"])
             print("🔍 Executing SQL:", sql.text)
             try:
@@ -90,7 +101,9 @@ def fetch_data(query_info, extra_columns=None):
         sql_parts.append(f"ORDER BY {order_by}")
     if limit:
         sql_parts.append(f"LIMIT {limit}")
-    sql = text(' '.join(sql_parts))
+    sql_str = ' '.join(sql_parts)
+    validate_sql(sql_str)
+    sql = text(sql_str)
 
     print("🔍 Executing SQL:", sql.text)
 
