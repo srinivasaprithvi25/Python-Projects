@@ -14,10 +14,20 @@ def parse_query(query):
     with open(os.path.abspath(prompt_path), 'r') as f:
         prompt_template = f.read()
 
+    schema_file = os.path.join(base_dir, '..', 'data', 'schema_info.json')
+    schema_info = ''
+    if os.path.exists(schema_file):
+        with open(schema_file, 'r') as f:
+            try:
+                schema_info = json.dumps(json.load(f))
+            except Exception:
+                schema_info = ''
+
     db_type = os.getenv("DB_TYPE", "")
     full_prompt = (prompt_template
                    .replace("{{query}}", query)
-                   .replace("{{db_type}}", db_type))
+                   .replace("{{db_type}}", db_type)
+                   .replace("{{schema_metadata}}", schema_info))
 
 
     try:

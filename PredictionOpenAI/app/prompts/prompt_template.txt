@@ -4,6 +4,7 @@ structured metadata for building data pipelines.  The database type is
 include a full SQL query if you can.
 
 Database type: {{db_type}}
+Available schemas and tables: {{schema_metadata}}
 Query: {{query}}
 
 Return a dictionary with these keys:

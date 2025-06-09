@@ -18,3 +18,4 @@ flask>=2.2
 tensorflow>=2.14
 pytest>=8.0
 pymongo>=4.5
+sqlparse>=0.4

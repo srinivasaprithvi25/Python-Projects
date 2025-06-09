@@ -1,5 +1,6 @@
 import os
-from sqlalchemy import create_engine, text
+import json
+from sqlalchemy import create_engine, text, inspect
 from dotenv import load_dotenv
 from urllib.parse import quote_plus
 
@@ -39,25 +40,29 @@ def get_db_engine():
 
     return engine
 def list_schemas_and_tables(engine):
-    """Print available schemas and tables to help users craft queries."""
+    """Print available schemas, tables, and columns. Save as JSON for the LLM."""
+    inspector = inspect(engine)
+    schema_info = {}
     try:
-        with engine.connect() as conn:
-            print("\n\U0001F4C2 Schemas and Tables in the Database:")
-            result = conn.execute(text(
-                """
-                SELECT table_schema, table_name
-                FROM information_schema.tables
-                WHERE table_type = 'BASE TABLE'
-                ORDER BY table_schema, table_name;
-                """
-            ))
-            rows = result.fetchall()
-            current_schema = None
-            for schema, table in rows:
-                if schema != current_schema:
-                    print(f"\n\U0001F4C1 Schema: {schema}")
-                    current_schema = schema
+        print("\n\U0001F4C2 Schemas and Tables in the Database:")
+        for schema in inspector.get_schema_names():
+            print(f"\n\U0001F4C1 Schema: {schema}")
+            schema_info[schema] = {}
+            for table in inspector.get_table_names(schema=schema):
                 print(f"  \U0001F4C4 {table}")
+                columns = inspector.get_columns(table, schema=schema)
+                schema_info[schema][table] = {
+                    col["name"]: str(col["type"]) for col in columns
+                }
+                for col in columns:
+                    print(f"    - {col['name']} ({col['type']})")
     except Exception as e:
         print(f"❌ Failed to list schemas/tables: {e}")
+    # persist schema info for prompting
+    try:
+        os.makedirs("data", exist_ok=True)
+        with open("data/schema_info.json", "w") as f:
+            json.dump(schema_info, f, indent=2)
+    except Exception:
+        pass
 
